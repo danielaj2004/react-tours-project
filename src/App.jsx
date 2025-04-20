@@ -1,35 +1,29 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from "react";
+import TourList from "./components/Gallery";
+import DestinationSelector from "./components/DestinationSelector";
 
 function App() {
-  const [count, setCount] = useState(0)
+    const [tours, setTours] = useState([]);
+    const [selectedDestination, setSelectedDestination] = useState("");
+ 
+    const onRemove = (id) => {
+        setTours((prevTours) => prevTours.filter((tour) => tour.id !== id));
+    };// To remove a tour from the list
 
-  return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    const filteredTours = selectedDestination
+        ? tours.filter((tour) => tour.name === selectedDestination)
+        : tours; // Filter tours based on chosen destination
+
+    return (
+        <>
+            <h1>Tour Explorer</h1>
+            <DestinationSelector
+                tours={tours}
+                onDestinationChange={setSelectedDestination}
+            />
+            <TourList tours={filteredTours} setTours={setTours} onRemove={onRemove} />
+        </>
+    );
 }
 
-export default App
+export default App;
